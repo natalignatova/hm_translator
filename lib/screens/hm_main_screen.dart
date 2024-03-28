@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
 import 'package:hm/screens/hm_history.dart';
@@ -31,16 +32,16 @@ class TranslationPage extends StatefulWidget {
 class _TranslationPageState extends State<TranslationPage> {
   TextEditingController _textEditingController = TextEditingController();
   String _translatedText = '';
-  final List<String> languages = ['Russian', 'English', 'Eesti']; // Список языков
-  String selectedLanguageFrom = 'English'; // Выбранный язык "из"
-  String selectedLanguageTo = 'Russian'; // Выбранный язык "в"
+  final List<String> languages = ['Russian', 'English', 'Eesti'];
+  String selectedLanguageFrom = 'English';
+  String selectedLanguageTo = 'Russian';
 
   void _translateText() async {
     String inputText = _textEditingController.text;
     String sourceLanguageCode;
     String targetLanguageCode;
 
-    // Определите код выбранного языка "из"
+    //  "из"
     switch (selectedLanguageFrom) {
       case 'Russian':
         sourceLanguageCode = 'ru';
@@ -52,10 +53,10 @@ class _TranslationPageState extends State<TranslationPage> {
         sourceLanguageCode = 'et';
         break;
       default:
-        sourceLanguageCode = 'en'; // По умолчанию используется английский
+        sourceLanguageCode = 'en';
     }
 
-    // Определите код выбранного языка "в"
+    //  "в"
     switch (selectedLanguageTo) {
       case 'Russian':
         targetLanguageCode = 'ru';
@@ -67,7 +68,7 @@ class _TranslationPageState extends State<TranslationPage> {
         targetLanguageCode = 'et';
         break;
       default:
-        targetLanguageCode = 'ru'; // По умолчанию используется русский
+        targetLanguageCode = 'ru';
     }
 
     Translation translation = await widget.translator.translate(
@@ -94,7 +95,7 @@ class _TranslationPageState extends State<TranslationPage> {
             fontFamily: 'Outfit',
           ),
         ),
-        backgroundColor: Color(0xFFf7f7f7),
+        backgroundColor: Color(0xFFb9b9c7),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.history, color: Color(0xFF3434c9)),
@@ -105,65 +106,116 @@ class _TranslationPageState extends State<TranslationPage> {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                DropdownButton<String>(
-                  value: selectedLanguageFrom, // Выбранный язык "из"
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedLanguageFrom = newValue!;
-                    });
-                  },
-                  items: languages.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                Icon(Icons.arrow_forward),
-                DropdownButton<String>(
-                  value: selectedLanguageTo, // Выбранный язык "в"
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedLanguageTo = newValue!;
-                    });
-                  },
-                  items: languages.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _textEditingController,
-              decoration: InputDecoration(
-                hintText: 'Put your text...',
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFb9b9c7),
+              Color(0xFF3434c9),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DropdownButton<String>(
+                    value: selectedLanguageFrom,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedLanguageFrom = newValue!;
+                      });
+                    },
+                    items: languages.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  Icon(Icons.arrow_forward),
+                  DropdownButton<String>(
+                    value: selectedLanguageTo,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedLanguageTo = newValue!;
+                      });
+                    },
+                    items: languages.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _translateText,
-              child: Text('Translate'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Translated Text:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(_translatedText),
-          ],
+              SizedBox(height: 20),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 4,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFcacad9),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextField(
+                        controller: _textEditingController,
+                        decoration: InputDecoration(
+                          hintText: 'Put your text...',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FloatingActionButton(
+                              backgroundColor: const Color(0xff3434c9),
+                              foregroundColor: Colors.grey[200],
+                              onPressed: _translateText,
+                              child: Icon(Icons.arrow_forward),
+                              shape: CircleBorder(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 4,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xffb5b5e8),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        _translatedText,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
