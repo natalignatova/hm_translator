@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hm/controllers/translator_controller.dart';
+import 'package:hm/widgets/youtube_widget.dart';
+
+import 'package:hm/controllers/search_controller.dart';
+import 'package:hm/functions/get_random_int_function.dart';
+
 
 class TranslationView extends StatefulWidget {
   final TranslationController controller;
@@ -11,6 +16,8 @@ class TranslationView extends StatefulWidget {
 }
 
 class _TranslationViewState extends State<TranslationView> {
+  final searchYT = SearchYT(searchQuery: '');
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -128,14 +135,36 @@ class _TranslationViewState extends State<TranslationView> {
             SizedBox(height: 8),
             SizedBox(
               height: MediaQuery.of(context).size.height / 4,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffa6a6e3),
-                  borderRadius: BorderRadius.circular(10),
-                ),
 
+              child: FutureBuilder<List<String>>(
+                future: searchYT.fetchVideoIds(widget.controller.translatedText), // Передаем translatedText
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  } else {
+                    List<String>? videoIds = snapshot.data;
+                    int randomInt = getRandomIndex(videoIds);
+                    if (videoIds != null && videoIds.isNotEmpty && videoIds[0] != null) {
+                      return Container(
+                        width: double.infinity,
+                        child: ShowMustGoOnWidget(videoId: videoIds[randomInt]),
+                      );
+                    } else {
+                      return Center(
+                        child: Text('No videos found'),
+                      );
+                    }
+                  }
+                },
               ),
             ),
+
           ],
         ),
       ),

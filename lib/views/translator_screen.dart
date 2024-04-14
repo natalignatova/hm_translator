@@ -50,7 +50,9 @@ class _HmMainScreenState extends State<HmMainScreen> {
           },
         ),
       ),
-      body: TranslationView(controller: translationController),
+      body: SingleChildScrollView(
+        child: TranslationView(controller: translationController),
+      ),
     );
   }
 }
