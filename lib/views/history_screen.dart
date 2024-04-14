@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hm/screens/hm_main_screen.dart';
+import 'package:hm/views/translator_screen.dart';
 
 class HmHistory extends StatelessWidget {
   const HmHistory({super.key});
