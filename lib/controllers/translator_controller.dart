@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:hm/controllers/search_controller.dart';
 import 'package:translator/translator.dart';
 
+import 'history_controller.dart';
+
 class TranslationController {
   final TextEditingController textEditingController = TextEditingController();
   String translatedText = '';
   final List<String> languages = ['Russian', 'English', 'Eesti'];
-  String selectedLanguageFrom = 'English';
-  String selectedLanguageTo = 'Russian';
+  String selectedLanguageFrom = 'Russian';
+  String selectedLanguageTo = 'Eesti';
   final GoogleTranslator translator;
   final Function? setStateCallback;
+
   late SearchYT searchYT;
 
   TranslationController({required this.translator, this.setStateCallback}) {
-    searchYT = SearchYT(searchQuery: '');
+    searchYT = SearchYT(searchQuery: 'EEK Mainor');
   }
 
   void updateSelectedLanguageFrom(String newValue) {

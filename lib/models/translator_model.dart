@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hm/controllers/history_controller.dart';
 import 'package:hm/controllers/translator_controller.dart';
+import 'package:hm/entities/hm_memory.dart';
 import 'package:hm/widgets/youtube_widget.dart';
-
-import 'package:hm/controllers/search_controller.dart';
-import 'package:hm/functions/get_random_int_function.dart';
-
+import '../controllers/search_controller.dart';
+import '../functions/get_random_int_function.dart';
 
 class TranslationView extends StatefulWidget {
   final TranslationController controller;
@@ -16,7 +16,24 @@ class TranslationView extends StatefulWidget {
 }
 
 class _TranslationViewState extends State<TranslationView> {
-  final searchYT = SearchYT(searchQuery: '');
+  final searchYT = SearchYT(searchQuery: 'tere tulemast EEK Mainor');
+
+  late AddHistoryMethod addHistory;
+  late GetHistoryMethod getHistory;
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    addHistory = AddHistoryMethod(updateStateCallback: () => setState(() {}));
+    getHistory = GetHistoryMethod();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose(); // Dispose the focus node when it is no longer needed
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +99,7 @@ class _TranslationViewState extends State<TranslationView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     TextField(
+                      focusNode: _focusNode,
                       controller: widget.controller.textEditingController,
                       decoration: InputDecoration(
                         hintText: 'Put your text...',
@@ -93,11 +111,12 @@ class _TranslationViewState extends State<TranslationView> {
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: FloatingActionButton(
                             backgroundColor: const Color(0xff3434c9),
                             foregroundColor: Colors.grey[200],
                             onPressed: () {
+                              _focusNode.unfocus(); // Hide the keyboard
                               setState(() {
                                 widget.controller.translateText();
                               });
@@ -117,17 +136,48 @@ class _TranslationViewState extends State<TranslationView> {
               height: MediaQuery.of(context).size.height / 4,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xffc7c7ff),
+                  color: Color(0xFFc7c7ff),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      widget.controller.translatedText,
-                      style: TextStyle(fontSize: 16),
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            widget.controller.translatedText,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FloatingActionButton(
+                              backgroundColor: const Color(0xff3434c9),
+                              foregroundColor: Colors.grey[200],
+                              onPressed: () {
+                                setState(() {
+                                  HmMemory hmHistory = HmMemory(
+                                    DateTime.now().subtract(Duration(milliseconds: DateTime.now().millisecond)),
+                                    widget.controller.textEditingController.text,
+                                    widget.controller.translatedText,
+                                  );
+                                  addHistory.addItemHistory(hmHistory);
+                                });
+                              },
+                              child: Icon(Icons.save_outlined),
+                              shape: CircleBorder(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -135,9 +185,8 @@ class _TranslationViewState extends State<TranslationView> {
             SizedBox(height: 8),
             SizedBox(
               height: MediaQuery.of(context).size.height / 4,
-
               child: FutureBuilder<List<String>>(
-                future: searchYT.fetchVideoIds(widget.controller.translatedText), // Передаем translatedText
+                future: searchYT.fetchVideoIds(widget.controller.translatedText), // Pass the translatedText
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -164,7 +213,6 @@ class _TranslationViewState extends State<TranslationView> {
                 },
               ),
             ),
-
           ],
         ),
       ),

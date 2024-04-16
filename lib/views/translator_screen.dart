@@ -42,10 +42,10 @@ class _HmMainScreenState extends State<HmMainScreen> {
         backgroundColor: Color(0xFFb9b9c7),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.history, color: Color(0xFF3434c9)),
+          icon: Icon(Icons.save, color: Color(0xFF3434c9)),
           onPressed: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => HmHistory()),
+              MaterialPageRoute(builder: (context) => HmHistoryView()),
             );
           },
         ),

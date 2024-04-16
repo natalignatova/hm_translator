@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "684870342485",
+    "project_id": "hmtranslator-418816",
+    "storage_bucket": "hmtranslator-418816.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684870342485:android:af292abe82b5bf5aa641dc",
+        "android_client_info": {
+          "package_name": "com.example.hm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAOx-1_RazVau61UWHZPb3rIcjoLxVuR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684870342485:android:6a825ac870ad15bea641dc",
+        "android_client_info": {
+          "package_name": "com.example.hmm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAOx-1_RazVau61UWHZPb3rIcjoLxVuR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
